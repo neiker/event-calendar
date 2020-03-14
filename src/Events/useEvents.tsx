@@ -53,12 +53,14 @@ async function queryFn(): Promise<EventsSection[]> {
   }, []);
 }
 
-export function useEvents(): {
+export function useEvents(type: 'ALL' | 'BOOKED'): {
   data: EventsSection[] | null;
   error: Error | null;
   status: 'loading' | 'success' | 'error';
   refetch: () => void;
 } {
+  // useQuery implements cache based on the queryKey,
+  // we add the type so the loading is shown once per tab
   const {
     data,
     error,
@@ -66,7 +68,7 @@ export function useEvents(): {
     // see: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42705
     // @ts-ignore
     status,
-  } = useQuery<EventsSection[], {}>('events', queryFn);
+  } = useQuery<EventsSection[], {}>(`events${type}`, queryFn);
 
   return {
     data,

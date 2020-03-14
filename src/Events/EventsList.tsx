@@ -49,14 +49,14 @@ export const EventsList: React.FunctionComponent<{
   type: 'ALL' | 'BOOKED';
 }> = ({ type }) => {
   const [bookedEventsIds, toggle] = useBooks();
-  const { data, status, refetch } = useEvents();
+  const { data, status, refetch } = useEvents(type);
 
 
   if (status === 'error') {
     // TODO Not all errors should display the refetch button.
 
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" className={styles.container}>
         <Box className={styles.empty}>
           <Typography variant="h5" align="center">
             An error occurred.
@@ -70,12 +70,14 @@ export const EventsList: React.FunctionComponent<{
   }
 
   if (status === 'loading') {
-    return <LinearProgress variant="query" color="primary" />;
+    return (
+      <LinearProgress variant="query" color="primary" className={styles.container} />
+    );
   }
 
   if (bookedEventsIds.length === 0 && type === 'BOOKED') {
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" className={styles.container}>
         <Box className={styles.empty}>
           <Typography variant="h5" align="center">
             You don&apos;t have booked events
@@ -86,7 +88,10 @@ export const EventsList: React.FunctionComponent<{
   }
 
   return (
-    <Container maxWidth="md">
+    <Container
+      maxWidth="md"
+      className={styles.container}
+    >
       {data?.map((section) => (
         <EventsSectionBox
           key={section.key}

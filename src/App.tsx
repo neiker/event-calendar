@@ -12,6 +12,7 @@ import { Header } from './Header';
 
 
 export const App: React.FunctionComponent = () => (
+
   <BrowserRouter>
     <Header />
 
@@ -24,4 +25,5 @@ export const App: React.FunctionComponent = () => (
       </Route>
     </Switch>
   </BrowserRouter>
+
 );

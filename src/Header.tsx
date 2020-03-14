@@ -16,6 +16,13 @@ export const Header: React.FunctionComponent = () => {
     <Tabs
       value={history.location.pathname}
       onChange={handleChange}
+      style={{
+        // TODO move to css module
+        position: 'fixed',
+        top: 0,
+        width: '100%',
+        backgroundColor: 'rgba(255,255,255,0.8)',
+      }}
     >
       <Tab label="All Events" value="/" />
       <Tab label="My Events" value="/booked" />
