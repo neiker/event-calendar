@@ -1,30 +1,25 @@
 import React from 'react';
 import {
-  Button, ButtonGroup, Grid, Typography, Container,
+  Tabs, Tab,
 } from '@material-ui/core';
 
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import styles from './NavBar.module.css';
 
-export const NavBar: React.FunctionComponent = () => (
-  <div className={styles.navbar}>
-    <Container>
-      <Grid container alignItems="center">
-        <Grid item xs={2}>
-          <Typography>Events</Typography>
-        </Grid>
-        <Grid item xs={10}>
-          <ButtonGroup variant="text" color="primary">
-            <Button>
-              <Link to="/">All Events</Link>
-            </Button>
-            <Button>
-              <Link to="/booked">My Events</Link>
-            </Button>
-          </ButtonGroup>
-        </Grid>
-      </Grid>
-    </Container>
-  </div>
-);
+export const NavBar: React.FunctionComponent = () => {
+  const history = useHistory();
+
+  const handleChange = (event: React.ChangeEvent<{}>, value: string) => {
+    history.push(value);
+  };
+
+  return (
+    <Tabs
+      value={history.location.pathname}
+      onChange={handleChange}
+    >
+      <Tab label="All Events" value="/" />
+      <Tab label="My Events" value="/booked" />
+    </Tabs>
+  );
+};
