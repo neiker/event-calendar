@@ -9,7 +9,7 @@ export const CancelButton: React.FunctionComponent<{
   return (
     <Button
       color={isHovered ? 'secondary' : undefined}
-      variant={isHovered ? 'contained' : 'outlined'}
+      variant="outlined"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}

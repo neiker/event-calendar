@@ -1,19 +1,23 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 
-import { Container, LinearProgress, Typography, Box } from '@material-ui/core';
+import { Container, LinearProgress, Typography, Box, Button } from '@material-ui/core';
 
-import { format } from 'date-fns';
-import { resolver } from '../resolver';
 import { EventRow } from './EventRow';
 
-export interface Event {
+import styles from './EventsList.module.css';
+import { useEvents } from './useEvents';
+
+export interface RawEvent {
   city: number;
   endDate: string;
   id: number;
   isFree: boolean;
   name: string;
   startDate: string;
+}
+
+export interface Event extends Omit<RawEvent, 'city'> {
+  city: City;  
 }
 
 export interface City {
@@ -55,110 +59,104 @@ function useBooks(): [number[], (id: number) => void] {
   return [bookedEventsIds, toggle];
 }
 
-type EventsSection = {
+export type EventsSection = {
   key: string;
   events: Event[];
 };
 
-const EventsSection: React.FunctionComponent<{
-    section: EventsSection,
-    onClickEvent: (event: Event) => void,
-    bookedEventsIds: number[],
-    type: Type,
-}> = ({ 
-    section: { key, events}, 
-    onClickEvent,
-    bookedEventsIds,
-    type,
-}) => {
-    const filteredEvents = type === 'BOOKED' ? events.filter(e => bookedEventsIds.includes(e.id)): events;
+export const EventsSection: React.FunctionComponent<{
+  section: EventsSection;
+  onClickEvent: (event: Event) => void;
+  bookedEventsIds: number[];
+  type: Type;
+}> = ({ section: { key, events }, onClickEvent, bookedEventsIds, type }) => {
+  const filteredEvents =
+    type === 'BOOKED'
+      ? events.filter(e => bookedEventsIds.includes(e.id))
+      : events;
 
-    if (!filteredEvents.length) {
-        return null
-    }
-    
-    return (
-        <Box key={key} style={{ marginTop: 20 }}>
-            <Typography>{key}</Typography>
+  if (!filteredEvents.length) {
+    return null;
+  }
 
-            {filteredEvents.map(event => {
-                const booked = bookedEventsIds.includes(event.id);
+  return (
+    <Box key={key} style={{ marginTop: 20 }}>
+      <Typography>{key}</Typography>
 
-                if (type === 'BOOKED' && !booked) {
-                    return null;
-                }
+      {filteredEvents.map(event => {
+        const booked = bookedEventsIds.includes(event.id);
 
-                return (
-                    <EventRow
-                        key={event.id}
-                        event={event}
-                        booked={booked}
-                        onClick={() => {
-                            onClickEvent(event);
-                        }}
-                    />
-                );
-            })}
-        </Box>
-    )
-}
+        if (type === 'BOOKED' && !booked) {
+          return null;
+        }
+
+        return (
+          <EventRow
+            key={event.id}
+            event={event}
+            booked={booked}
+            onClick={() => {
+              onClickEvent(event);
+            }}
+          />
+        );
+      })}
+    </Box>
+  );
+};
 
 export const EventsList: React.FunctionComponent<{
   type: Type;
 }> = ({ type }) => {
-  const { data } = useQuery<EventsSection[], {}>('events', () =>
-    resolver('https://api.jsonbin.io/b/5e6be60fdf26b84aac0eb316').then(items =>
-      items.reduce((acc: EventsSection[], item: Event) => {
-        const date = format(new Date(item.startDate), 'EEEE io LLLL');
-
-        const section = acc.find(i => i.key === date);
-
-        if (section) {
-          section.events.push(item);
-
-          return acc;
-        }
-
-        return [
-          ...acc,
-          {
-            key: date,
-            events: [item],
-          },
-        ];
-      }, []),
-    ),
-  );
-
   const [bookedEventsIds, toggle] = useBooks();
+  const { data, status, refetch } = useEvents();
 
-  if (data === undefined) {
+  
+  if (status === 'error') {
+    // TODO Not all errors should display the refetch button.
+
+    return (
+      <Container maxWidth="md">
+        <Box className={styles.empty}>
+          <Typography variant="h5" align="center">
+            An error occurred.
+          </Typography>
+          <Button onClick={refetch} color="primary">
+            Try again
+          </Button>
+        </Box>
+      </Container>
+    );
+  }
+
+  if (status === 'loading') {
     return <LinearProgress variant="query" color="secondary" />;
   }
 
   if (bookedEventsIds.length === 0 && type === 'BOOKED') {
     return (
       <Container maxWidth="md">
-        <Typography variant="h4" align="center">
-          You don't have booked events
-        </Typography>
+        <Box className={styles.empty}>
+          <Typography variant="h5" align="center">
+            You don't have booked events
+          </Typography>
+        </Box>
       </Container>
     );
   }
 
   return (
     <Container maxWidth="md">
-      {data?.map((section) => (
-          <EventsSection 
-            key={section.key} 
-            section={section} 
-            bookedEventsIds={bookedEventsIds}
-            type={type}
-            onClickEvent={(event) => {
-                toggle(event.id);
-            }}
-          />
-        
+      {data?.map(section => (
+        <EventsSection
+          key={section.key}
+          section={section}
+          bookedEventsIds={bookedEventsIds}
+          type={type}
+          onClickEvent={event => {
+            toggle(event.id);
+          }}
+        />
       ))}
     </Container>
   );
