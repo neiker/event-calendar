@@ -8,7 +8,8 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core';
-import { Event } from './EventsList';
+
+import { Event } from './types';
 
 export const ConfirmDialog: React.FunctionComponent<{
   open: boolean;
@@ -16,7 +17,9 @@ export const ConfirmDialog: React.FunctionComponent<{
   onPressClose: () => void;
   onPressConfirm: () => void;
   event: Event;
-}> = ({ open, booked, onPressClose, onPressConfirm, event }) => (
+}> = ({
+  open, booked, onPressClose, onPressConfirm, event,
+}) => (
   <Dialog
     open={open}
     onClose={onPressClose}
@@ -29,10 +32,20 @@ export const ConfirmDialog: React.FunctionComponent<{
 
     <DialogContent>
       <DialogContentText id="alert-dialog-description">
-        You are about to {booked ? <strong>cancel </strong> : ''}sign up for{' '}
-        <strong>{event.name}</strong>. This event take place the{' '}
-        <strong>{format(new Date(event.startDate), 'EEEE io LLLL')}</strong> in{' '}
-        <strong>{event.city.name}</strong>.
+        You are about to
+        {' '}
+        {booked ? <strong>cancel </strong> : ''}
+sign up for
+        {' '}
+        <strong>{event.name}</strong>
+. This event take place the
+        {' '}
+        <strong>{format(new Date(event.startDate), 'EEEE io LLLL')}</strong>
+        {' '}
+in
+        {' '}
+        <strong>{event.city.name}</strong>
+.
       </DialogContentText>
       <DialogContentText id="alert-dialog-description">
         Are you sure?

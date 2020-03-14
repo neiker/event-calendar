@@ -1,20 +1,20 @@
 import { useQuery } from 'react-query';
 import { format } from 'date-fns';
 
-import { EventsSection, RawEvent, City } from './EventsList';
+import { EventsSection, RawEvent, City } from './types';
 
 async function resolver(url: string) {
-    const response = await fetch(url);
-    
-    
-    if (!response.ok) {
-        throw new Error(response.statusText)
-    }
+  const response = await fetch(url);
 
-    return response.json();
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
 
-  
+  return response.json();
+}
+
+
 async function queryFn(): Promise<EventsSection[]> {
   const [rawEvents, cities] = (await Promise.all([
     resolver('https://api.jsonbin.io/b/5e6be60fdf26b84aac0eb316'),
@@ -22,7 +22,7 @@ async function queryFn(): Promise<EventsSection[]> {
   ])) as [RawEvent[], City[]];
 
   return rawEvents.reduce((acc: EventsSection[], rawEvent: RawEvent) => {
-    const city = cities.find(i => i.id === rawEvent.city);
+    const city = cities.find((i) => i.id === rawEvent.city);
 
     if (!city) {
       throw new Error('Invalid city id');
@@ -35,7 +35,7 @@ async function queryFn(): Promise<EventsSection[]> {
 
     const date = format(new Date(rawEvent.startDate), 'EEEE io LLLL');
 
-    const section = acc.find(i => i.key === date);
+    const section = acc.find((i) => i.key === date);
 
     if (section) {
       section.events.push(event);
@@ -51,7 +51,6 @@ async function queryFn(): Promise<EventsSection[]> {
       },
     ];
   }, []);
-
 }
 
 export function useEvents(): {
@@ -60,11 +59,14 @@ export function useEvents(): {
   status: 'loading' | 'success' | 'error';
   refetch: () => void;
 } {
-  // see: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42705
-  // @ts-ignore 
-  const { data, error, refetch, status } = useQuery<EventsSection[], {}>('events', queryFn);
-
-  console.log(status);
+  const {
+    data,
+    error,
+    refetch,
+    // see: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42705
+    // @ts-ignore
+    status,
+  } = useQuery<EventsSection[], {}>('events', queryFn);
 
   return {
     data,

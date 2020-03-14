@@ -10,9 +10,10 @@ import {
   Chip,
 } from '@material-ui/core';
 
-import { Event } from './EventsList';
+import { Event } from './types';
 
 import styles from './EventRow.module.css';
+
 import { SignUpButton } from './SignUpButton';
 import { CancelButton } from './CancelButton';
 import { ConfirmDialog } from './ConfirmDialog';

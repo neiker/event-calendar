@@ -3,15 +3,13 @@ import { Button } from '@material-ui/core';
 
 export const SignUpButton: React.FunctionComponent<{
   onClick: () => void;
-}> = ({ onClick }) => {
-  return (
-    <Button
-      variant="outlined"
-      color="primary"
-      onClick={onClick}
-      fullWidth
-    >
+}> = ({ onClick }) => (
+  <Button
+    variant="outlined"
+    color="primary"
+    onClick={onClick}
+    fullWidth
+  >
       Sign Up
-    </Button>
-  );
-};
+  </Button>
+);

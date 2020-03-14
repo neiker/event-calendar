@@ -4,27 +4,24 @@ import {
   BrowserRouter,
   Switch,
   Route,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 import './App.css';
 import { EventsList } from './Events/EventsList';
 import { NavBar } from './NavBar';
 
-export const App: React.FunctionComponent = () => {
 
-  return (
-    <BrowserRouter>
-      <NavBar />
+export const App: React.FunctionComponent = () => (
+  <BrowserRouter>
+    <NavBar />
 
-      <Switch>
-          <Route path="/" exact>
-            <EventsList type="ALL"/>
-          </Route>
-          <Route path="/booked" exact>
-            <EventsList type="BOOKED"/>
-          </Route>
-        </Switch>
-    </BrowserRouter>
-  );
-}
-
+    <Switch>
+      <Route path="/" exact>
+        <EventsList type="ALL" />
+      </Route>
+      <Route path="/booked" exact>
+        <EventsList type="BOOKED" />
+      </Route>
+    </Switch>
+  </BrowserRouter>
+);

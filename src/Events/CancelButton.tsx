@@ -3,6 +3,7 @@ import { Button } from '@material-ui/core';
 
 export const CancelButton: React.FunctionComponent<{
   onClick: () => void;
+
 }> = ({ onClick }) => {
   const [isHovered, setIsHovered] = React.useState<boolean>(false);
 
