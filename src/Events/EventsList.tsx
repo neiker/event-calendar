@@ -55,17 +55,60 @@ function useBooks(): [number[], (id: number) => void] {
   return [bookedEventsIds, toggle];
 }
 
-type EventsSections = {
+type EventsSection = {
   key: string;
   events: Event[];
-}[];
+};
+
+const EventsSection: React.FunctionComponent<{
+    section: EventsSection,
+    onClickEvent: (event: Event) => void,
+    bookedEventsIds: number[],
+    type: Type,
+}> = ({ 
+    section: { key, events}, 
+    onClickEvent,
+    bookedEventsIds,
+    type,
+}) => {
+    const filteredEvents = type === 'BOOKED' ? events.filter(e => bookedEventsIds.includes(e.id)): events;
+
+    if (!filteredEvents.length) {
+        return null
+    }
+    
+    return (
+        <Box key={key} style={{ marginTop: 20 }}>
+            <Typography>{key}</Typography>
+
+            {filteredEvents.map(event => {
+                const booked = bookedEventsIds.includes(event.id);
+
+                if (type === 'BOOKED' && !booked) {
+                    return null;
+                }
+
+                return (
+                    <EventRow
+                        key={event.id}
+                        event={event}
+                        booked={booked}
+                        onClick={() => {
+                            onClickEvent(event);
+                        }}
+                    />
+                );
+            })}
+        </Box>
+    )
+}
 
 export const EventsList: React.FunctionComponent<{
   type: Type;
 }> = ({ type }) => {
-  const { data } = useQuery<EventsSections, {}>('events', () =>
+  const { data } = useQuery<EventsSection[], {}>('events', () =>
     resolver('https://api.jsonbin.io/b/5e6be60fdf26b84aac0eb316').then(items =>
-      items.reduce((acc: EventsSections, item: Event) => {
+      items.reduce((acc: EventsSection[], item: Event) => {
         const date = format(new Date(item.startDate), 'EEEE io LLLL');
 
         const section = acc.find(i => i.key === date);
@@ -75,7 +118,7 @@ export const EventsList: React.FunctionComponent<{
 
           return acc;
         }
-        
+
         return [
           ...acc,
           {
@@ -105,28 +148,17 @@ export const EventsList: React.FunctionComponent<{
 
   return (
     <Container maxWidth="md">
-      {data?.map(({ key, events }) => (
-        <Box key={key} style={{ marginTop: 20 }}>
-          <Typography>{key}</Typography>
-          {events.map(event => {
-            const booked = bookedEventsIds.includes(event.id);
-
-            if (type === 'BOOKED' && !booked) {
-              return null;
-            }
-
-            return (
-              <EventRow
-                key={event.id}
-                event={event}
-                booked={booked}
-                onClick={() => {
-                  toggle(event.id);
-                }}
-              />
-            );
-          })}
-        </Box>
+      {data?.map((section) => (
+          <EventsSection 
+            key={section.key} 
+            section={section} 
+            bookedEventsIds={bookedEventsIds}
+            type={type}
+            onClickEvent={(event) => {
+                toggle(event.id);
+            }}
+          />
+        
       ))}
     </Container>
   );
