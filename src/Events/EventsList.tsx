@@ -4,12 +4,11 @@ import {
   Container, LinearProgress, Typography, Box, Button,
 } from '@material-ui/core';
 
-import { EventRow } from './EventRow';
 
 import styles from './EventsList.module.css';
 import { useEvents } from './useEvents';
 
-import { Event, EventsSection } from './types';
+import { EventsSectionBox } from './EventsSectionBox';
 
 function useBooks(): [number[], (id: number) => void] {
   const [bookedEventsIds, setBookedEventsIds] = React.useState<number[]>([]);
@@ -46,48 +45,6 @@ function useBooks(): [number[], (id: number) => void] {
 }
 
 
-export const EventsSectionBox: React.FunctionComponent<{
-  section: EventsSection;
-  onClickEvent: (event: Event) => void;
-  bookedEventsIds: number[];
-  type: 'ALL' | 'BOOKED';
-}> = ({
-  section: { key, events }, onClickEvent, bookedEventsIds, type,
-}) => {
-  const filteredEvents = type === 'BOOKED'
-    ? events.filter((e) => bookedEventsIds.includes(e.id))
-    : events;
-
-  if (!filteredEvents.length) {
-    return null;
-  }
-
-  return (
-    <Box key={key} style={{ marginTop: 20 }}>
-      <Typography>{key}</Typography>
-
-      {filteredEvents.map((event) => {
-        const booked = bookedEventsIds.includes(event.id);
-
-        if (type === 'BOOKED' && !booked) {
-          return null;
-        }
-
-        return (
-          <EventRow
-            key={event.id}
-            event={event}
-            booked={booked}
-            onClick={() => {
-              onClickEvent(event);
-            }}
-          />
-        );
-      })}
-    </Box>
-  );
-};
-
 export const EventsList: React.FunctionComponent<{
   type: 'ALL' | 'BOOKED';
 }> = ({ type }) => {
@@ -113,7 +70,7 @@ export const EventsList: React.FunctionComponent<{
   }
 
   if (status === 'loading') {
-    return <LinearProgress variant="query" color="secondary" />;
+    return <LinearProgress variant="query" color="primary" />;
   }
 
   if (bookedEventsIds.length === 0 && type === 'BOOKED') {
