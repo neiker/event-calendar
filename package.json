@@ -36,7 +36,6 @@
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.5.0",
     "@testing-library/user-event": "7.2.1",
-    "typescript": "3.7.5",
     "@types/jest": "24.9.1",
     "@types/node": "12.12.30",
     "@types/react": "16.9.23",
@@ -48,6 +47,7 @@
     "eslint-plugin-import": "2.20.1",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.19.0",
-    "eslint-plugin-react-hooks": "1.7.0"
+    "eslint-plugin-react-hooks": "1.7.0",
+    "typescript": "3.7.5"
   }
 }

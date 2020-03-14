@@ -14,15 +14,19 @@ export const EventsSectionBox: React.FunctionComponent<{
 }> = ({
   section: { key, events }, onClickEvent, bookedEventsIds, type,
 }) => {
-  const filteredEvents = type === 'BOOKED'
-    ? events.filter((e) => bookedEventsIds.includes(e.id))
-    : events;
+  const filteredEvents = React.useMemo(() => (
+    type === 'ALL'
+      ? events
+      : events.filter((e) => bookedEventsIds.includes(e.id))
+  ), [bookedEventsIds, events, type]);
+
   if (!filteredEvents.length) {
     return null;
   }
+
   return (
-    <Box key={key} className={styles.container}>
-      <Typography gutterBottom>{key}</Typography>
+    <Box className={styles.container}>
+      <Typography variant="subtitle2" gutterBottom>{key}</Typography>
 
       <Paper elevation={2} className={styles['section-wrapper']}>
         {filteredEvents.map((event, index) => {
@@ -31,17 +35,16 @@ export const EventsSectionBox: React.FunctionComponent<{
             return null;
           }
           return (
-            <>
+            <React.Fragment key={event.id}>
               {index !== 0 && <Divider className={styles.divider} />}
               <EventRow
-                key={event.id}
                 event={event}
                 booked={booked}
                 onClick={() => {
                   onClickEvent(event);
                 }}
               />
-            </>
+            </React.Fragment>
           );
         })}
       </Paper>
