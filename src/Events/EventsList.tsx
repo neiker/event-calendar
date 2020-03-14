@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 
 
+import { Link } from 'react-router-dom';
 import styles from './EventsList.module.css';
 import { useEvents } from './useEvents';
 
@@ -82,6 +83,7 @@ export const EventsList: React.FunctionComponent<{
           <Typography variant="h5" align="center">
             You don&apos;t have booked events
           </Typography>
+          <Button component={Link} to="/" color="primary">Book one</Button>
         </Box>
       </Container>
     );
