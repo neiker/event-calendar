@@ -5,11 +5,10 @@ import {
 
 import { useHistory } from 'react-router-dom';
 
-
-export const NavBar: React.FunctionComponent = () => {
+export const Header: React.FunctionComponent = () => {
   const history = useHistory();
 
-  const handleChange = (event: React.ChangeEvent<{}>, value: string) => {
+  const handleChange = (_: any, value: string) => {
     history.push(value);
   };
 

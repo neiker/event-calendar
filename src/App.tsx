@@ -8,12 +8,12 @@ import {
 
 import './App.css';
 import { EventsList } from './Events/EventsList';
-import { NavBar } from './NavBar';
+import { Header } from './Header';
 
 
 export const App: React.FunctionComponent = () => (
   <BrowserRouter>
-    <NavBar />
+    <Header />
 
     <Switch>
       <Route path="/" exact>
