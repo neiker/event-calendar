@@ -1,0 +1,10 @@
+.navbar {
+    background: #94ba7a;
+    padding: 10px 0;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+}
