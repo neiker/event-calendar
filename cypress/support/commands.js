@@ -33,3 +33,11 @@ Cypress.Commands.add("mockAndVisit", () => {
 
         cy.visit('http://localhost:3000/');
 })
+
+Cypress.Commands.add("getEventByName", (name) => {
+    return cy.contains(name)
+            .parents('.cypress-event-container')
+});
+Cypress.Commands.add("confirmDialog", (label = 'Yes') => {
+    return cy.focused().contains(label).click();
+});

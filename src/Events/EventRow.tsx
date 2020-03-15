@@ -34,7 +34,7 @@ export const EventRow: React.FunctionComponent<{
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className="cypress-event-container">
         <Grid item xs={12} sm={1} md={1}>
           <Typography variant="subtitle1">
             {format(new Date(event.startDate), 'HH:mm')}
