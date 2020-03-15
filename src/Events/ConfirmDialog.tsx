@@ -39,20 +39,20 @@ export const ConfirmDialog: React.FunctionComponent<{
 
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-              You are about to
+          You are about to
           {' '}
           {booked ? <strong>cancel </strong> : ''}
-      sign up for
+              sign up for
           {' '}
           <strong>{event.name}</strong>
-      . This event take place the
+              . This event take place the
           {' '}
           <strong>{format(new Date(event.startDate), 'EEEE io LLLL')}</strong>
           {' '}
-      in
+              in
           {' '}
           <strong>{event.city.name}</strong>
-      .
+          .
         </DialogContentText>
         <DialogContentText id="alert-dialog-description">
               Are you sure?
@@ -60,9 +60,9 @@ export const ConfirmDialog: React.FunctionComponent<{
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onPressClose}>Abort</Button>
+        <Button onClick={onPressClose}>No</Button>
         <Button autoFocus onClick={onPressConfirm} color="primary">
-          {booked ? 'Cancel Sign up' : 'Sign up'}
+          Yes
         </Button>
       </DialogActions>
     </Dialog>

@@ -72,7 +72,9 @@ export const EventsList: React.FunctionComponent<{
 
   if (status === 'loading') {
     return (
-      <LinearProgress variant="query" color="primary" className={styles.container} />
+      <Container className={styles.container}>
+        <LinearProgress variant="query" color="primary" />
+      </Container>
     );
   }
 
@@ -94,6 +96,8 @@ export const EventsList: React.FunctionComponent<{
       maxWidth="md"
       className={styles.container}
     >
+      {type === 'BOOKED' && <Typography variant="h5">My next tech events</Typography>}
+
       {data?.map((section) => (
         <EventsSectionBox
           key={section.key}

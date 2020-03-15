@@ -46,12 +46,13 @@ export const EventRow: React.FunctionComponent<{
               {event.name}
             </Typography>
             {event.isFree && (
-            <Chip
-              size="small"
-              label="Free"
-              style={{ marginLeft: 5 }}
-              color="primary"
-            />
+              <Chip
+                size="small"
+                label="Free"
+                style={{ marginLeft: 5 }}
+                color="secondary"
+                variant="outlined"
+              />
             )}
           </Box>
           <Box>
@@ -83,8 +84,9 @@ export const EventRow: React.FunctionComponent<{
       </Grid>
 
 
+      {open && (
       <ConfirmDialog
-        open={open}
+        open
         booked={booked}
         onPressClose={handleClose}
         onPressConfirm={() => {
@@ -93,6 +95,7 @@ export const EventRow: React.FunctionComponent<{
         }}
         event={event}
       />
+      )}
     </>
   );
 };
