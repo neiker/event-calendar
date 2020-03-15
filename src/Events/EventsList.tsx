@@ -50,7 +50,7 @@ export const EventsList: React.FunctionComponent<{
   type: 'ALL' | 'BOOKED';
 }> = ({ type }) => {
   const [bookedEventsIds, toggle] = useBooks();
-  const { data, status, refetch } = useEvents(type);
+  const { data, status, refetch } = useEvents();
 
 
   if (status === 'error') {

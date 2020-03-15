@@ -10,7 +10,7 @@ import './App.css';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
 import { EventsList } from './Events/EventsList';
-import { Header } from './Header';
+import { Header } from './Header/Header';
 
 const theme = createMuiTheme({
   palette: {

@@ -3,15 +3,24 @@ import { format } from 'date-fns';
 
 import { EventsSection, RawEvent, City } from './types';
 
-async function resolver(url: string) {
-  const response = await fetch(url);
+// We don't use fetch() because is not supported by cypress
+// see: https://github.com/cypress-io/cypress/issues/95
+function resolver(url: string) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
 
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.response));
+      } else {
+        reject(new Error());
+      }
+    };
 
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
+    xhr.open('GET', url);
 
-  return response.json();
+    xhr.send();
+  });
 }
 
 
@@ -53,14 +62,12 @@ async function queryFn(): Promise<EventsSection[]> {
   }, []);
 }
 
-export function useEvents(type: 'ALL' | 'BOOKED'): {
+export function useEvents(): {
   data: EventsSection[] | null;
   error: Error | null;
   status: 'loading' | 'success' | 'error';
   refetch: () => void;
 } {
-  // useQuery implements cache based on the queryKey,
-  // we add the type so the loading is shown once per tab
   const {
     data,
     error,
@@ -68,7 +75,7 @@ export function useEvents(type: 'ALL' | 'BOOKED'): {
     // see: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42705
     // @ts-ignore
     status,
-  } = useQuery<EventsSection[], {}>(`events${type}`, queryFn);
+  } = useQuery<EventsSection[], {}>('events', queryFn);
 
   return {
     data,
