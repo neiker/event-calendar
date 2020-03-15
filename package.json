@@ -13,9 +13,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "cypress run",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build && npx http-server ./build -p 3000",
+    "cypress:run": "cypress run",
+    "test": "start-server-and-test build http://localhost:3000 cypress:run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,6 +49,7 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.19.0",
     "eslint-plugin-react-hooks": "1.7.0",
+    "start-server-and-test": "1.10.10",
     "typescript": "3.7.5"
   }
 }
