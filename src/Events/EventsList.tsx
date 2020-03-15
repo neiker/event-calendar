@@ -72,9 +72,9 @@ export const EventsList: React.FunctionComponent<{
 
   if (status === 'loading') {
     return (
-      <Container className={styles.container}>
+      <Box className={styles.container}>
         <LinearProgress variant="query" color="primary" />
-      </Container>
+      </Box>
     );
   }
 
@@ -96,19 +96,21 @@ export const EventsList: React.FunctionComponent<{
       maxWidth="md"
       className={styles.container}
     >
-      {type === 'BOOKED' && <Typography variant="h5">My next tech events</Typography>}
+      <Box className={styles.content}>
+        {type === 'BOOKED' && <Typography variant="h5">My next tech events</Typography>}
 
-      {data?.map((section) => (
-        <EventsSectionBox
-          key={section.key}
-          section={section}
-          bookedEventsIds={bookedEventsIds}
-          type={type}
-          onClickEvent={(event) => {
-            toggle(event.id);
-          }}
-        />
-      ))}
+        {data?.map((section) => (
+          <EventsSectionBox
+            key={section.key}
+            section={section}
+            bookedEventsIds={bookedEventsIds}
+            type={type}
+            onClickEvent={(event) => {
+              toggle(event.id);
+            }}
+          />
+        ))}
+      </Box>
     </Container>
   );
 };
