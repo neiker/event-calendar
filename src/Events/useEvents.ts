@@ -7,6 +7,7 @@ import {
   City,
   Event,
 } from './types';
+import { useBookings } from './useBookings';
 
 // We don't use fetch() because is not supported by cypress
 // see: https://github.com/cypress-io/cypress/issues/95
@@ -52,12 +53,14 @@ async function queryFn(): Promise<Event[]> {
 }
 
 
-export function useEvents(bookedEventsIds: number[], type: 'ALL' | 'BOOKED'): {
+export function useEvents(type: 'ALL' | 'BOOKED'): {
   events: Event[] | null;
   error: Error | null;
   status: 'loading' | 'success' | 'error';
   refetch: () => void;
+  toogleBooked: (event: Event) => void;
 } {
+  const [bookedEventsIds, toogleBooked] = useBookings();
   const {
     data,
     error,
@@ -88,5 +91,6 @@ export function useEvents(bookedEventsIds: number[], type: 'ALL' | 'BOOKED'): {
     error,
     status,
     refetch,
+    toogleBooked,
   };
 }

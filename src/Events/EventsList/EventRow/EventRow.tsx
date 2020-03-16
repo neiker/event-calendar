@@ -19,8 +19,8 @@ import { ConfirmDialog } from './ConfirmDialog';
 
 export const EventRow: React.FunctionComponent<{
   event: Event;
-  onClick: () => void;
-}> = ({ event, onClick }) => {
+  onClickToogle: () => void;
+}> = ({ event, onClickToogle }) => {
   const [open, setOpen] = React.useState<boolean>(false);
 
   const handleOpen = () => {
@@ -89,7 +89,7 @@ export const EventRow: React.FunctionComponent<{
           onPressClose={handleClose}
           onPressConfirm={() => {
             handleClose();
-            onClick();
+            onClickToogle();
           }}
           event={event}
         />

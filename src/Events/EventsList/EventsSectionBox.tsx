@@ -9,10 +9,10 @@ import { Event, EventsSection } from '../types';
 
 export const EventsSectionBox: React.FunctionComponent<{
   section: EventsSection;
-  onClickEvent: (event: Event) => void;
+  onClickToogleEvent: (event: Event) => void;
 }> = ({
   section: { key, events },
-  onClickEvent,
+  onClickToogleEvent,
 
 }) => {
   if (!events.length) {
@@ -29,9 +29,8 @@ export const EventsSectionBox: React.FunctionComponent<{
             {index !== 0 && <Divider className={styles.divider} />}
             <EventRow
               event={event}
-
-              onClick={() => {
-                onClickEvent(event);
+              onClickToogle={() => {
+                onClickToogleEvent(event);
               }}
             />
           </React.Fragment>

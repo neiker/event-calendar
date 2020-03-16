@@ -1,7 +1,9 @@
 import React from 'react';
+import { Event } from './types';
 
-export function useBookings(): [number[], (id: number) => void] {
+export function useBookings(): [number[], (event: Event) => void] {
   const [bookedEventsIds, setBookedEventsIds] = React.useState<number[]>([]);
+
   React.useEffect(() => {
     try {
       const idsString = localStorage.getItem('ids');
@@ -12,17 +14,20 @@ export function useBookings(): [number[], (id: number) => void] {
       // do nothing
     }
   }, []);
+
   React.useEffect(() => {
     localStorage.setItem('ids', JSON.stringify(bookedEventsIds));
   }, [bookedEventsIds]);
-  const toggle = React.useCallback((id: number) => {
+
+  const toggle = React.useCallback((event: Event) => {
     setBookedEventsIds((currentIds) => {
-      const index = currentIds.indexOf(id);
+      const index = currentIds.indexOf(event.id);
       if (index === -1) {
-        return [...currentIds, id];
+        return [...currentIds, event.id];
       }
-      return currentIds.filter((i) => i !== id);
+      return currentIds.filter((i) => i !== event.id);
     });
   }, []);
+
   return [bookedEventsIds, toggle];
 }
