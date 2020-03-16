@@ -38,7 +38,7 @@ const Sections: React.FunctionComponent<{
     return (
       <Box className={styles.empty}>
         <Typography variant="h5" align="center">
-          {type === 'BOOKED' ? 'You don&apos;t have booked events' : 'No results for this filters.'}
+          {type === 'BOOKED' ? 'You don\'t have booked events' : 'No results for this filters.'}
         </Typography>
         {type === 'BOOKED' ? (
           <Button component={Link} to="/" color="primary">Book one</Button>
