@@ -9,10 +9,10 @@ import { Event, EventsSection } from '../types';
 
 export const EventsSectionBox: React.FunctionComponent<{
   section: EventsSection;
-  onClickToogleEvent: (event: Event) => void;
+  onClickToogleBooked: (event: Event) => void;
 }> = ({
   section: { key, events },
-  onClickToogleEvent,
+  onClickToogleBooked,
 
 }) => {
   if (!events.length) {
@@ -30,7 +30,7 @@ export const EventsSectionBox: React.FunctionComponent<{
             <EventRow
               event={event}
               onClickToogle={() => {
-                onClickToogleEvent(event);
+                onClickToogleBooked(event);
               }}
             />
           </React.Fragment>

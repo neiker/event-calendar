@@ -68,7 +68,9 @@ export function useEvents(type: 'ALL' | 'BOOKED'): {
     // see: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42705
     // @ts-ignore
     status,
-  } = useQuery<Event[], {}>('events', queryFn);
+  } = useQuery<Event[], {}>('events', queryFn, {
+    retry: 1,
+  });
 
   const events = React.useMemo(() => data?.reduce((acc: Event[], event: Event) => {
     const booked = bookedEventsIds.includes(event.id);
