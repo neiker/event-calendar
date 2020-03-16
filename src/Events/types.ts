@@ -9,6 +9,7 @@ export interface RawEvent {
 
 export interface Event extends Omit<RawEvent, 'city'> {
   city: City;
+  booked: boolean;
 }
 
 export interface City {

@@ -10,7 +10,7 @@ import {
   Chip,
 } from '@material-ui/core';
 
-import { Event } from './types';
+import { Event } from '../../types';
 
 
 import { SignUpButton } from './SignUpButton';
@@ -19,9 +19,8 @@ import { ConfirmDialog } from './ConfirmDialog';
 
 export const EventRow: React.FunctionComponent<{
   event: Event;
-  booked: boolean;
   onClick: () => void;
-}> = ({ event, booked, onClick }) => {
+}> = ({ event, onClick }) => {
   const [open, setOpen] = React.useState<boolean>(false);
 
   const handleOpen = () => {
@@ -70,12 +69,12 @@ export const EventRow: React.FunctionComponent<{
                 new Date(event.endDate),
                 new Date(event.startDate),
               )}
-                hr
+              hr
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={12} sm={3} md={2}>
-          {booked ? (
+          {event.booked ? (
             <CancelButton onClick={handleOpen} />
           ) : (
             <SignUpButton onClick={handleOpen} />
@@ -85,16 +84,15 @@ export const EventRow: React.FunctionComponent<{
 
 
       {open && (
-      <ConfirmDialog
-        open
-        booked={booked}
-        onPressClose={handleClose}
-        onPressConfirm={() => {
-          handleClose();
-          onClick();
-        }}
-        event={event}
-      />
+        <ConfirmDialog
+          open
+          onPressClose={handleClose}
+          onPressConfirm={() => {
+            handleClose();
+            onClick();
+          }}
+          event={event}
+        />
       )}
     </>
   );

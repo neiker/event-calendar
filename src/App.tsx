@@ -9,7 +9,7 @@ import {
 import './App.css';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 
-import { EventsList } from './Events/EventsList';
+import { EventsList } from './Events/EventsList/EventsList';
 import { Header } from './Header/Header';
 
 const theme = createMuiTheme({
@@ -34,6 +34,9 @@ const theme = createMuiTheme({
   },
 });
 
+const AllEvents: React.FunctionComponent = () => <EventsList type="ALL" />;
+const MyEvents: React.FunctionComponent = () => <EventsList type="BOOKED" />;
+
 export const App: React.FunctionComponent = () => (
   <ThemeProvider theme={theme}>
     <BrowserRouter>
@@ -41,10 +44,10 @@ export const App: React.FunctionComponent = () => (
 
       <Switch>
         <Route path="/" exact>
-          <EventsList type="ALL" />
+          <AllEvents />
         </Route>
         <Route path="/booked" exact>
-          <EventsList type="BOOKED" />
+          <MyEvents />
         </Route>
       </Switch>
     </BrowserRouter>

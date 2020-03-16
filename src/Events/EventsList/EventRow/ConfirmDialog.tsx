@@ -11,16 +11,16 @@ import {
   useMediaQuery,
 } from '@material-ui/core';
 
-import { Event } from './types';
+import { Event } from '../../types';
 
 export const ConfirmDialog: React.FunctionComponent<{
   open: boolean;
-  booked: boolean;
+
   onPressClose: () => void;
   onPressConfirm: () => void;
   event: Event;
 }> = ({
-  open, booked, onPressClose, onPressConfirm, event,
+  open, onPressClose, onPressConfirm, event,
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
@@ -34,28 +34,28 @@ export const ConfirmDialog: React.FunctionComponent<{
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        {booked ? 'Leave the event' : 'Join the event'}
+        {event.booked ? 'Leave the event' : 'Join the event'}
       </DialogTitle>
 
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           You are about to
           {' '}
-          {booked ? <strong>cancel </strong> : ''}
-              sign up for
+          {event.booked ? <strong>cancel </strong> : ''}
+          sign up for
           {' '}
           <strong>{event.name}</strong>
-              . This event take place the
+          . This event take place the
           {' '}
           <strong>{format(new Date(event.startDate), 'EEEE io LLLL')}</strong>
           {' '}
-              in
+          in
           {' '}
           <strong>{event.city.name}</strong>
           .
         </DialogContentText>
         <DialogContentText id="alert-dialog-description">
-              Are you sure?
+          Are you sure?
         </DialogContentText>
       </DialogContent>
 

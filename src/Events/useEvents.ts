@@ -1,7 +1,12 @@
 import { useQuery } from 'react-query';
-import { format } from 'date-fns';
 
-import { EventsSection, RawEvent, City } from './types';
+
+import React from 'react';
+import {
+  RawEvent,
+  City,
+  Event,
+} from './types';
 
 // We don't use fetch() because is not supported by cypress
 // see: https://github.com/cypress-io/cypress/issues/95
@@ -24,46 +29,31 @@ function resolver(url: string) {
 }
 
 
-async function queryFn(): Promise<EventsSection[]> {
+async function queryFn(): Promise<Event[]> {
   const [rawEvents, cities] = (await Promise.all([
     resolver('https://api.jsonbin.io/b/5e6be60fdf26b84aac0eb316'),
     resolver('https://api.jsonbin.io/b/5e6be5d707f1954acedf7f20'),
   ])) as [RawEvent[], City[]];
 
-  return rawEvents.reduce((acc: EventsSection[], rawEvent: RawEvent) => {
+
+  return rawEvents.map((rawEvent) => {
     const city = cities.find((i) => i.id === rawEvent.city);
 
     if (!city) {
       throw new Error('Invalid city id');
     }
 
-    const event = {
+    return {
       ...rawEvent,
+      booked: false,
       city,
     };
-
-    const date = format(new Date(rawEvent.startDate), 'EEEE io LLLL');
-
-    const section = acc.find((i) => i.key === date);
-
-    if (section) {
-      section.events.push(event);
-
-      return acc;
-    }
-
-    return [
-      ...acc,
-      {
-        key: date,
-        events: [event],
-      },
-    ];
-  }, []);
+  });
 }
 
-export function useEvents(): {
-  data: EventsSection[] | null;
+
+export function useEvents(bookedEventsIds: number[], type: 'ALL' | 'BOOKED'): {
+  events: Event[] | null;
   error: Error | null;
   status: 'loading' | 'success' | 'error';
   refetch: () => void;
@@ -75,10 +65,26 @@ export function useEvents(): {
     // see: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42705
     // @ts-ignore
     status,
-  } = useQuery<EventsSection[], {}>('events', queryFn);
+  } = useQuery<Event[], {}>('events', queryFn);
+
+  const events = React.useMemo(() => data?.reduce((acc: Event[], event: Event) => {
+    const booked = bookedEventsIds.includes(event.id);
+
+    if (type === 'BOOKED' && !booked) {
+      return acc;
+    }
+
+    return [
+      ...acc,
+      {
+        ...event,
+        booked,
+      },
+    ];
+  }, []), [bookedEventsIds, data, type]);
 
   return {
-    data,
+    events: events || null,
     error,
     status,
     refetch,

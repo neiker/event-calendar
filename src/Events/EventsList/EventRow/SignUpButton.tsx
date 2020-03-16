@@ -10,6 +10,6 @@ export const SignUpButton: React.FunctionComponent<{
     onClick={onClick}
     fullWidth
   >
-      Sign Up
+    Sign Up
   </Button>
 );
